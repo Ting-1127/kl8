@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>快乐8 · 开奖数据公报</title>
+<style>
+  :root {
+    --paper: oklch(97.2% 0.009 85);
+    --paper-deep: oklch(94.5% 0.013 82);
+    --ink: oklch(27% 0.021 55);
+    --ink-soft: oklch(46% 0.018 60);
+    --ink-faint: oklch(62% 0.014 65);
+    --red: oklch(52% 0.195 27);
+    --red-deep: oklch(43% 0.175 26);
+    --gold: oklch(72% 0.105 78);
+    --line: oklch(85% 0.012 75);
+    --line-strong: oklch(72% 0.018 70);
+    --serif: "Noto Serif SC", "Songti SC", "STSong", "SimSun", serif;
+    --sans: "PingFang SC", "Microsoft YaHei", "Hiragino Sans GB", sans-serif;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.7;
+    background-image:
+      repeating-linear-gradient(0deg, transparent 0 2px, oklch(97% 0.01 85 / .5) 2px 3px);
+  }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 0 clamp(1rem, 4vw, 3rem); }
+
+  /* ============ 报头 ============ */
+  header { padding: clamp(2.2rem, 6vw, 4.5rem) 0 0; }
+  .masthead {
+    display: flex; align-items: baseline; justify-content: space-between;
+    gap: 1.5rem; flex-wrap: wrap;
+    border-bottom: 3px double var(--ink);
+    padding-bottom: 1.1rem;
+  }
+  .masthead h1 {
+    font-family: var(--serif);
+    font-size: clamp(1.9rem, 5.2vw, 3.3rem);
+    font-weight: 900; letter-spacing: .06em; line-height: 1.15;
+  }
+  .masthead h1 .no { color: var(--red); }
+  .masthead .meta {
+    font-size: .82rem; color: var(--ink-soft); letter-spacing: .12em;
+    text-align: right; line-height: 2;
+  }
+  .masthead .meta strong { color: var(--red-deep); font-weight: 600; letter-spacing: .05em; }
+  .tagline {
+    display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap;
+    font-size: .78rem; letter-spacing: .22em; color: var(--ink-faint);
+    padding: .55rem 0; border-bottom: 1px solid var(--line);
+    text-transform: uppercase;
+  }
+
+  /* ============ 最新开奖 ============ */
+  .latest { padding: clamp(1.8rem, 5vw, 3.2rem) 0 clamp(1.2rem, 3vw, 2rem); }
+  .latest-head {
+    display: flex; align-items: baseline; gap: clamp(.8rem, 2.5vw, 1.6rem);
+    flex-wrap: wrap; margin-bottom: 1.6rem;
+  }
+  .latest-head .issue {
+    font-family: var(--serif); font-weight: 900;
+    font-size: clamp(1.6rem, 4.6vw, 2.7rem); line-height: 1;
+    font-variant-numeric: tabular-nums;
+  }
+  .latest-head .issue em { font-style: normal; color: var(--red); }
+  .latest-head .date { font-family: var(--serif); font-size: 1.05rem; color: var(--ink-soft); }
+  .latest-head .week {
+    font-size: .72rem; letter-spacing: .25em; color: var(--paper);
+    background: var(--ink); padding: .22em .85em; border-radius: 2px;
+  }
+  .balls {
+    display: flex; flex-wrap: wrap; gap: clamp(.45rem, 1.4vw, .8rem);
+    list-style: none;
+  }
+  .ball {
+    width: clamp(2.45rem, 5.6vw, 3.35rem); height: clamp(2.45rem, 5.6vw, 3.35rem);
+    border-radius: 50%;
+    display: grid; place-items: center;
+    font-family: var(--serif); font-weight: 700;
+    font-size: clamp(.95rem, 2.2vw, 1.22rem);
+    font-variant-numeric: tabular-nums;
+    color: var(--red-deep);
+    background: var(--paper);
+    border: 1.5px solid var(--red);
+    box-shadow: inset 0 -2px 0 oklch(52% 0.195 27 / .12);
+    animation: drop .5s cubic-bezier(.22,1,.36,1) backwards;
+  }
+  .ball:nth-child(2n)  { animation-delay: .045s; }
+  .ball:nth-child(3n)  { animation-delay: .09s; }
+  .ball:nth-child(5n)  { animation-delay: .135s; }
+  .ball:nth-child(7n)  { animation-delay: .18s; }
+  @keyframes drop { from { opacity: 0; transform: translateY(-10px); } }
+  @media (prefers-reduced-motion: reduce) { .ball { animation: none; } }
+
+  /* ============ 数据速览 ============ */
+  .stats {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    border-top: 1px solid var(--line-strong); border-bottom: 1px solid var(--line-strong);
+  }
+  .stat { padding: 1.15rem 1.1rem 1.15rem 0; }
+  .stat + .stat { border-left: 1px solid var(--line); padding-left: 1.1rem; }
+  .stat .k { font-size: .72rem; letter-spacing: .22em; color: var(--ink-faint); margin-bottom: .3rem; }
+  .stat .v {
+    font-family: var(--serif); font-size: clamp(1.25rem, 3vw, 1.75rem);
+    font-weight: 700; line-height: 1.25; font-variant-numeric: tabular-nums;
+  }
+  .stat .v small { font-size: .62em; font-weight: 400; color: var(--ink-soft); margin-left: .25em; letter-spacing: .06em; }
+  .stat .v .hot { color: var(--red); }
+
+  /* ============ 号码频次 ============ */
+  section { padding: clamp(2.2rem, 5.5vw, 3.6rem) 0 0; }
+  .sec-head {
+    display: flex; align-items: baseline; justify-content: space-between;
+    gap: 1rem; flex-wrap: wrap; margin-bottom: 1.5rem;
+  }
+  .sec-head h2 {
+    font-family: var(--serif); font-size: clamp(1.28rem, 3vw, 1.72rem);
+    font-weight: 900; letter-spacing: .12em;
+    border-left: 5px solid var(--red); padding-left: .7em;
+  }
+  .sec-head .sub { font-size: .8rem; color: var(--ink-faint); letter-spacing: .12em; }
+  .switch { display: flex; gap: 0; border: 1px solid var(--line-strong); border-radius: 2px; overflow: hidden; }
+  .switch button {
+    font-family: var(--sans); font-size: .8rem; letter-spacing: .12em;
+    padding: .38em 1.15em; border: none; cursor: pointer;
+    background: transparent; color: var(--ink-soft);
+  }
+  .switch button + button { border-left: 1px solid var(--line-strong); }
+  .switch button.on { background: var(--ink); color: var(--paper); }
+
+  .freq-grid {
+    display: grid; gap: 1px; background: var(--line);
+    grid-template-columns: repeat(auto-fill, minmax(78px, 1fr));
+    border: 1px solid var(--line);
+  }
+  .fcell {
+    background: var(--paper); padding: .55rem .45rem .62rem;
+    text-align: center; position: relative; overflow: hidden;
+  }
+  .fcell .num {
+    font-family: var(--serif); font-weight: 700; font-size: 1.02rem;
+    font-variant-numeric: tabular-nums; letter-spacing: .03em;
+  }
+  .fcell .cnt { font-size: .72rem; color: var(--ink-soft); font-variant-numeric: tabular-nums; }
+  .fcell .cnt b { color: var(--red-deep); font-weight: 600; }
+  .fcell .bar {
+    position: absolute; left: 0; bottom: 0; height: 3px;
+    background: var(--red); opacity: .75; transition: width .6s cubic-bezier(.22,1,.36,1);
+  }
+  .fcell .cold { color: var(--ink-faint); }
+  .fcell:hover { background: var(--paper-deep); }
+  .fcell .omit {
+    position: absolute; top: .22rem; right: .3rem;
+    font-size: .6rem; color: var(--gold); letter-spacing: .02em;
+  }
+  .legend {
+    display: flex; gap: 1.6rem; flex-wrap: wrap;
+    font-size: .74rem; color: var(--ink-faint); letter-spacing: .1em; margin-top: .9rem;
+  }
+  .legend i { display: inline-block; width: .7em; height: .7em; margin-right: .45em; vertical-align: -1px; }
+
+  /* ============ 历史开奖 ============ */
+  .toolbar {
+    display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;
+    margin-bottom: 1.1rem;
+  }
+  .search {
+    font-family: var(--sans); font-size: .92rem; color: var(--ink);
+    background: transparent; border: none;
+    border-bottom: 1.5px solid var(--line-strong);
+    padding: .45em .2em; width: min(320px, 70vw); outline: none;
+    transition: border-color .25s;
+  }
+  .search:focus { border-color: var(--red); }
+  .search::placeholder { color: var(--ink-faint); letter-spacing: .08em; }
+  .toolbar .count { font-size: .8rem; color: var(--ink-faint); letter-spacing: .12em; }
+
+  .table-wrap { border: 1px solid var(--line-strong); overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+  thead th {
+    font-family: var(--sans); font-size: .72rem; font-weight: 600;
+    letter-spacing: .18em; color: var(--ink-soft); text-align: left;
+    padding: .72rem .95rem; border-bottom: 2px solid var(--ink);
+    background: var(--paper-deep); white-space: nowrap;
+  }
+  tbody td {
+    padding: .68rem .95rem; border-bottom: 1px solid var(--line);
+    font-size: .92rem; vertical-align: middle;
+  }
+  tbody tr:nth-child(even) { background: oklch(95.8% 0.011 84 / .55); }
+  tbody tr:hover { background: var(--paper-deep); }
+  td.issue { font-family: var(--serif); font-weight: 700; letter-spacing: .03em; white-space: nowrap; }
+  td.date, td.week { color: var(--ink-soft); white-space: nowrap; }
+  td.date { font-size: .86rem; }
+  .mini {
+    display: flex; flex-wrap: wrap; gap: .22rem; min-width: 220px;
+  }
+  .mini span {
+    width: 1.62em; height: 1.62em; border-radius: 50%;
+    display: inline-grid; place-items: center;
+    font-family: var(--serif); font-size: .72rem; font-weight: 600;
+    border: 1px solid oklch(52% 0.195 27 / .45); color: var(--red-deep);
+    background: oklch(98% 0.008 80);
+  }
+  .empty { padding: 2.6rem 1rem; text-align: center; color: var(--ink-faint); letter-spacing: .15em; }
+  .empty b { display: block; font-family: var(--serif); font-size: 1.15rem; color: var(--ink-soft); margin-bottom: .3rem; }
+
+  /* ============ 页脚 ============ */
+  footer {
+    margin-top: clamp(2.6rem, 6vw, 4.2rem); padding: 1.6rem 0 2.8rem;
+    border-top: 3px double var(--ink);
+    display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap;
+    font-size: .76rem; letter-spacing: .14em; color: var(--ink-faint);
+  }
+  footer a { color: var(--red-deep); text-decoration: none; border-bottom: 1px solid oklch(52% 0.195 27 / .35); }
+  .err {
+    margin: 3rem 0; padding: 1.2rem 1.4rem; border: 1.5px solid var(--red);
+    background: oklch(96% 0.02 30); color: var(--red-deep); font-size: .92rem;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="masthead">
+      <h1>快乐<span class="no">8</span> · 开奖数据公报</h1>
+      <div class="meta">
+        数据来源 <strong>中国福利彩票官网</strong><br>
+        共 <strong id="m-total">—</strong> 期 · 更新至 <strong id="m-end">—</strong>
+      </div>
+    </div>
+    <div class="tagline">
+      <span>China Welfare Lottery · Keno 80</span>
+      <span id="m-range">2026</span>
+    </div>
+  </header>
+
+  <main id="app">
+    <div class="empty" id="loading">正在读取开奖数据……</div>
+  </main>
+
+  <footer>
+    <span>本页由 GitHub Actions 每日 22:10（北京时间）自动更新</span>
+    <span>数据仅供整理参考 · <a href="快乐8开奖数据.json">JSON</a> / <a href="快乐8开奖数据.xlsx">Excel</a></span>
+  </footer>
+</div>
+
+<script>
+const pad = n => String(n).padStart(2, '0');
+
+function render(data) {
+  const issues = data.issues;
+  const latest = issues[0];
+  const freq = data.number_frequency;
+
+  // 遗漏值：当前距离上次出现隔了多少期
+  const omit = {};
+  for (let n = 1; n <= 80; n++) {
+    let k = 0;
+    while (k < issues.length && !issues[k].numbers.includes(n)) k++;
+    omit[n] = k;
+  }
+  const freqArr = [];
+  for (let n = 1; n <= 80; n++) freqArr.push({ n, c: freq[String(n)] || 0, o: omit[n] });
+  const maxC = Math.max(...freqArr.map(x => x.c));
+  const hot = freqArr.filter(x => x.c === maxC).map(x => pad(x.n)).join(' ');
+  const minC = Math.min(...freqArr.map(x => x.c));
+  const cold = freqArr.filter(x => x.c === minC).map(x => pad(x.n)).join(' ');
+  const latestOmit = [...freqArr].sort((a, b) => b.o - a.o).slice(0, 3)
+    .map(x => `${pad(x.n)}(${x.o}期)`).join(' ');
+
+  document.getElementById('m-total').textContent = data.total_issues;
+  document.getElementById('m-end').textContent = data.date_range.end;
+  document.getElementById('m-range').textContent =
+    `${data.date_range.start} — ${data.date_range.end}`;
+
+  const app = document.getElementById('app');
+  app.innerHTML = `
+    <div class="latest">
+      <div class="latest-head">
+        <div class="issue">第 <em>${latest.issue}</em> 期</div>
+        <div class="date">${latest.date}</div>
+        <div class="week">${latest.weekday}</div>
+      </div>
+      <ul class="balls">
+        ${latest.numbers.map(n => `<li class="ball">${pad(n)}</li>`).join('')}
+      </ul>
+    </div>
+
+    <div class="stats">
+      <div class="stat"><div class="k">总期数</div><div class="v">${data.total_issues}<small>期</small></div></div>
+      <div class="stat"><div class="k">最热号码</div><div class="v"><span class="hot">${hot}</span><small>出现 ${maxC} 次</small></div></div>
+      <div class="stat"><div class="k">最冷号码</div><div class="v">${cold}<small>出现 ${minC} 次</small></div></div>
+      <div class="stat"><div class="k">当前遗漏最久</div><div class="v" style="font-size:1.05rem">${latestOmit}</div></div>
+    </div>
+
+    <section>
+      <div class="sec-head">
+        <h2>号码频次</h2>
+        <div class="switch" id="freq-sort">
+          <button class="on" data-k="num">按号码</button>
+          <button data-k="cnt">按热度</button>
+        </div>
+      </div>
+      <div class="freq-grid" id="freq-grid"></div>
+      <div class="legend">
+        <span><i style="background:var(--red)"></i>横条长度 = 出现次数</span>
+        <span><i style="background:var(--gold)"></i>右上角 = 当前遗漏期数</span>
+        <span>频率 = 出现次数 ÷ ${data.total_issues} 期</span>
+      </div>
+    </section>
+
+    <section>
+      <div class="sec-head">
+        <h2>历史开奖</h2>
+        <div class="sub">输入期号 / 日期快速检索</div>
+      </div>
+      <div class="toolbar">
+        <input class="search" id="q" placeholder="搜索期号或日期，如 2026288 / 10-29">
+        <span class="count" id="row-count"></span>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr>
+            <th>期号</th><th>日期</th><th>星期</th><th>开奖号码</th>
+          </tr></thead>
+          <tbody id="tbody"></tbody>
+        </table>
+        <div class="empty" id="no-hit" hidden>
+          <b>没有找到匹配的期号</b>
+          换个关键词试试，比如「20262」或「10-」
+        </div>
+      </div>
+    </section>
+  `;
+
+  const grid = document.getElementById('freq-grid');
+  function drawFreq(mode) {
+    const arr = mode === 'cnt'
+      ? [...freqArr].sort((a, b) => b.c - a.c || a.n - b.n)
+      : freqArr;
+    grid.innerHTML = arr.map(x => `
+      <div class="fcell">
+        <div class="num">${pad(x.n)}</div>
+        <div class="cnt ${x.c === minC ? 'cold' : ''}"><b>${x.c}</b> 次</div>
+        <div class="cnt ${x.c === minC ? 'cold' : ''}">${(x.c / data.total_issues * 100).toFixed(0)}%</div>
+        ${x.o > 0 ? `<div class="omit">遗${x.o}</div>` : ''}
+        <div class="bar" style="width:${(x.c / maxC * 100).toFixed(1)}%"></div>
+      </div>`).join('');
+  }
+  drawFreq('num');
+  document.getElementById('freq-sort').addEventListener('click', e => {
+    const btn = e.target.closest('button');
+    if (!btn) return;
+    document.querySelectorAll('#freq-sort button').forEach(b => b.classList.toggle('on', b === btn));
+    drawFreq(btn.dataset.k);
+  });
+
+  const tbody = document.getElementById('tbody');
+  const noHit = document.getElementById('no-hit');
+  const rowCount = document.getElementById('row-count');
+  function drawTable(q = '') {
+    const s = q.trim();
+    const rows = issues.filter(r =>
+      !s || String(r.issue).includes(s) || r.date.includes(s) || r.weekday.includes(s));
+    tbody.innerHTML = rows.map(r => `
+      <tr>
+        <td class="issue">${r.issue}</td>
+        <td class="date">${r.date}</td>
+        <td class="week">${r.weekday}</td>
+        <td><div class="mini">${r.numbers.map(n => `<span>${pad(n)}</span>`).join('')}</div></td>
+      </tr>`).join('');
+    noHit.hidden = rows.length > 0;
+    rowCount.textContent = `${rows.length} / ${issues.length} 期`;
+  }
+  drawTable();
+  document.getElementById('q').addEventListener('input', e => drawTable(e.target.value));
+}
+
+fetch('快乐8开奖数据.json')
+  .then(r => {
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    return r.json();
+  })
+  .then(render)
+  .catch(err => {
+    document.getElementById('loading').outerHTML =
+      `<div class="err"><b>数据加载失败</b><br>${err.message}<br>
+       本地预览请在仓库根目录运行 <code>python3 -m http.server 8000</code> 后访问
+       <code>http://localhost:8000</code>（直接双击打开会被浏览器的文件安全策略拦截）。</div>`;
+  });
+</script>
+</body>
+</html>
