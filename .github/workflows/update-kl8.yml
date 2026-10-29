@@ -1,1 +1,63 @@
+name: Update KL8 Data & Deploy Web
 
+on:
+  schedule:
+    # 北京时间 22:10 = UTC 14:10（快乐8 每日 21:30 开奖后）
+    - cron: '10 14 * * *'
+  workflow_dispatch: # 允许手动触发
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: kl8-update
+  cancel-in-progress: false
+
+jobs:
+  update-data:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: pip install openpyxl
+
+      - name: Fetch latest draw data
+        run: python3 fetch_kl8.py
+
+      - name: Commit & push if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions@users.noreply.github.com"
+          git add 快乐8开奖数据.json 快乐8开奖数据.xlsx
+          if git diff --cached --quiet; then
+            echo "No new draw data."
+          else
+            git commit -m "data: update kl8 $(date -u +%F)"
+            git pull --rebase origin main || true
+            git push
+          fi
+
+  deploy-web:
+    needs: update-data
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: '.'
+
+      - id: deployment
+        uses: actions/deploy-pages@v4
